@@ -64,19 +64,19 @@ def divide_groups(groupingvar):
 #returned by the above function       
         
 def hypothesis_test(groupingvar,interestvar):
-    uniquevalues = check_values_in_variable(groupingvar) #get unique values
+    uniquevalues = check_values_in_variable(groupingvar) 
     groups=[]
     groupnames=[]
     varlists=[]
     results=[]
-    for value in uniquevalues: #append all the unique values to a groupname list
+    for value in uniquevalues
         groups.append(responses.groupby([groupingvar]).get_group(value))
         groupnames.append(value)
-    for group in groups: #append all the values of **variable of interest**
-        varlists.append(group[interestvar]) #to the list
-    for var1 in varlists: #conduct the t-test, append all p-values of comparing the values
-        for var2 in varlists:
-            if (var1 is var2):
+    for group in groups
+        varlists.append(group[interestvar])
+    for var1 in varlists 
+        for var2 in varlists
+            if (var1 is var2)
                 continue
             else:
                 results.append(stats.ttest_ind(var1,var2))
@@ -101,47 +101,7 @@ fig, ax = plt.subplots(figsize=(5,5))
 sns.countplot(responses[var_of_interest], orient = 'h')
 _ = plt.xticks(fontsize=14)
 _ = plt.yticks(fontsize=14)
-#------- query3: plot corr plot with seaborn --------  [figure_2a, figure_2]
 
-def do_ploting(x, y, figsize): #draw only 1 bar
-    fig, ax = plt.subplots(figsize= figsize)
-    ax.set_title("Correlation coefficient of the variables")
-    sns.barplot(x=x, y=y,  ax = ax)
-    ax.set_ylabel("Correlation coefficients")
-
-def correlation_plot(var_of_interest, df_main, figsize = (10,30)):
-    def calc_corr(var_of_interest, df, cols, figsize):
-        lbls = []
-        vals = []
-        for col in cols:
-            lbls.append(col)
-            vals.append(np.corrcoef(df[col], df[var_of_interest])[0,1])
-        corrs = pd.DataFrame({'features': lbls, 'corr_values': vals})
-        corrs = corrs.sort_values(by='corr_values')
-        do_ploting(corrs.corr_values, corrs['features'], figsize)
-        return corrs
-   
-    df = copy.deepcopy(df_main)
-    mean_values = df.mean(axis=0)
-    df.fillna(mean_values, inplace=True)
-    cols_floats = [col for col in df.columns if df[col].dtype!='object']
-    cols_floats.remove(var_of_interest)
-    corrs_one = calc_corr(var_of_interest, df, cols_floats, figsize)
-    cols_cats = [col for col in df.columns if df[col].dtype=='object']
-    if cols_cats:
-        df_dummies = pd.get_dummies(df[cols_cats])
-        cols_cats = df_dummies.columns
-        df_dummies[var_of_interest] = df[var_of_interest]
-        corrs_two = calc_corr(var_of_interest, df_dummies, cols_cats, (5,10))
-    else:
-        corrs_two = 0
-    return [corrs_one, corrs_two]
-#plotting the correlation graph with var_of_interest(loneliness) & responses
-corrs_area = correlation_plot(var_of_interest, responses)
-corr_num = corrs_area[0] 
-corr_cats = corrs_area[1] 
-print(corr_num)
-print(corr_cats)
 #%% query 4
 from sklearn.cross_validation import KFold, train_test_split, cross_val_score
 from sklearn.model_selection import GridSearchCV
